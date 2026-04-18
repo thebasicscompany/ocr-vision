@@ -1,0 +1,10 @@
+This project includes code adapted from:
+
+xulihang/macOCR — https://github.com/xulihang/macOCR
+MIT License — Copyright (c) 2021-2024 xulihang
+
+The adapted code is the ~30-line VNRecognizeTextRequest setup + observation-to-
+pixel-bbox conversion block in Sources/ocr-vision/main.swift, delimited by the
+"adapted from xulihang/macOCR" comment markers. All other code in this
+repository is original to basics/ocr-vision and licensed under the main LICENSE
+file.
