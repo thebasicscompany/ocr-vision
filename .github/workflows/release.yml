@@ -8,9 +8,10 @@ permissions:
 
 jobs:
   build:
-    # macos-14 is Apple Silicon and supports `swift build --arch arm64 --arch x86_64`
+    # macos-15 ships Xcode 16 by default (Swift 6 + Testing framework).
+    # Apple Silicon runner supports `swift build --arch arm64 --arch x86_64`
     # cross-compile to x86_64 in a single step (see 07-RESEARCH A3).
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
