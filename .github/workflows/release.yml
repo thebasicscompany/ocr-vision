@@ -1,0 +1,40 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write  # needed to attach Release assets
+
+jobs:
+  build:
+    # macos-14 is Apple Silicon and supports `swift build --arch arm64 --arch x86_64`
+    # cross-compile to x86_64 in a single step (see 07-RESEARCH A3).
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show toolchain versions
+        run: |
+          swift --version
+          xcode-select -p
+          sw_vers
+
+      - name: Run contract-conformance tests
+        run: swift test
+
+      - name: Build universal binary
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          chmod +x ./build.sh
+          ./build.sh "$VERSION"
+
+      - name: Verify universal slices
+        run: lipo -info build/ocr-vision-universal | grep -E "arm64.*x86_64|x86_64.*arm64"
+
+      - name: Attach assets to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/ocr-vision-v*-universal.tar.gz
+            build/ocr-vision-v*-universal.tar.gz.sha256
